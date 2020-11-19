@@ -1,6 +1,14 @@
+const env = require('dotenv').config();
+
+if (env && env.error) {
+  throw env.error;
+}
+
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const { v4: uuidv4 } = require('uuid');
+
+const log = require('./utilities/log');
 
 const PROTO_PATH = './proto/Posts.proto';
 
@@ -15,19 +23,21 @@ const postsProto = grpc.loadPackageDefinition(packageDefinition);
 
 const server = new grpc.Server();
 
+// mock data
 const posts = [
   {
-    id: 1,
+    id: uuidv4(),
     text: 'This is the text ONE',
     title: 'This is the title ONE',
   },
   {
-    id: 2,
+    id: uuidv4(),
     text: 'This is the text TWO',
     title: 'This is the title TWO',
   },
 ];
 
+// add service to the server
 server.addService(postsProto.PostsService.service, {
   getPosts: (_, callback) => {
     return callback(null, { posts });
@@ -41,9 +51,18 @@ server.addService(postsProto.PostsService.service, {
   },
 });
 
-const port = 6844;
+const port = Number(process.env.PORT) || 6844;
 
-server.bind(`127.0.0.1:${port}`, grpc.ServerCredentials.createInsecure());
-console.log(`-- GRPC SERVER is running on port ${port}`);
+// launch the server
+server.bindAsync(
+  `127.0.0.1:${port}`,
+  grpc.ServerCredentials.createInsecure(),
+  (error) => {
+    if (error) {
+      throw error;
+    }
 
-server.start();
+    log(`-- SIMPLE GRPC SERVER is running on port ${port}`);
+    return server.start();
+  },
+);
