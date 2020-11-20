@@ -8,9 +8,11 @@ service PostsService {
 message Empty {}
 
 message Post {
-  string id = 1;
+  string _id = 1;
   string text = 2;
   string title = 3;
+  string created = 4;
+  string updated = 5;
 }
 
 message NewPost {

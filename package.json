@@ -28,6 +28,7 @@
     "@grpc/grpc-js": "^1.2.1",
     "@grpc/proto-loader": "^0.5.5",
     "dotenv": "^8.2.0",
+    "mongoose": "^5.10.15",
     "uuid": "^8.3.1"
   },
   "devDependencies": {

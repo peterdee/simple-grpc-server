@@ -9,6 +9,9 @@ const protoLoader = require('@grpc/proto-loader');
 const { v4: uuidv4 } = require('uuid');
 
 const log = require('./utilities/log');
+const { PORT } = require('./configuration');
+
+const getPosts = require('./handlers/get-posts.handler');
 
 const PROTO_PATH = './proto/Posts.proto';
 
@@ -39,8 +42,15 @@ const posts = [
 
 // add service to the server
 server.addService(postsProto.PostsService.service, {
-  getPosts: (_, callback) => {
-    return callback(null, { posts });
+  getPosts: async (_, callback) => {
+    const { data, error, isError } = await getPosts();
+    if (isError) {
+      return callback({
+        code: grpc.status.NOT_FOUND,
+        details: error
+      });
+    }
+    return callback(null, { posts: data });
   },
   createPost: (call, callback) => {
     let post = call.request;
@@ -51,18 +61,16 @@ server.addService(postsProto.PostsService.service, {
   },
 });
 
-const port = Number(process.env.PORT) || 6844;
-
 // launch the server
 server.bindAsync(
-  `127.0.0.1:${port}`,
+  `127.0.0.1:${PORT}`,
   grpc.ServerCredentials.createInsecure(),
   (error) => {
     if (error) {
       throw error;
     }
 
-    log(`-- SIMPLE GRPC SERVER is running on port ${port}`);
+    log(`-- SIMPLE GRPC SERVER is running on port ${PORT}`);
     return server.start();
   },
 );
