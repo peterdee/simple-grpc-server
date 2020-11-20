@@ -1,12 +1,28 @@
 {
   "name": "simple-grpc-server",
   "version": "1.0.0",
+  "private": true,
   "description": "A simple gRPC server with Node",
-  "main": "index.js",
+  "homepage": "https://github.com/peterdee/simple-grpc-server",
+  "author": {
+    "name": "Peter Dyumin",
+    "url": "https://github.com/peterdee"
+  },
   "scripts": {
     "start": "nodemon ./index.js"
   },
-  "author": "Peter Dyumin",
+  "engines": {
+    "node": ">=14.15.0",
+    "npm": "6.14.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peterdee/simple-grpc-server"
+  },
+  "keywords": [
+    "gRPC",
+    "Node"
+  ],
   "license": "ISC",
   "dependencies": {
     "@grpc/grpc-js": "^1.2.1",
