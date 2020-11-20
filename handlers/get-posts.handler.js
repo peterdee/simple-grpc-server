@@ -7,12 +7,12 @@ module.exports = async () => {
       data: posts,
       error: null,
       isError: false,
-    }
+    };
   } catch (error) {
     return {
       data: null,
       error,
       isError: true,
-    }
+    };
   }
 };

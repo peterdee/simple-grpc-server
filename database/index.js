@@ -37,5 +37,4 @@ fs.readdirSync(`${__dirname}/schemas`)
     connection[name] = mongoose.model(name, require(`./schemas/${file}`)(mongoose));
   });
 
-
 module.exports = connection;
